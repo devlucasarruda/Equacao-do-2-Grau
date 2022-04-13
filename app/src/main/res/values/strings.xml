@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Equação do 2º Grau</string>
+    <string name="ax2">ax²</string>
+    <string name="bx">bx</string>
+    <string name="c">c</string>
+    <string name="Calcular">Calcular</string>
+</resources>
