@@ -75,7 +75,17 @@ class MainActivity : AppCompatActivity() {
         val df = DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH))
         df.maximumFractionDigits = 340 //340 = DecimalFormat.DOUBLE_FRACTION_DIGITS
 
-        val line1:String = getSign(a) + df.format(abs(a)).toString()+"x²" + getSign(b) + df.format(abs(b)).toString()+"x" + getSign(c) + df.format(abs(c)).toString() + "\n"
+        val line1:String = if(a<0.0 && abs(b) != 1.0){
+            "-" + df.format(abs(a)).toString() + "x²" + getSign(b) + df.format(abs(b)).toString() + "x" + getSign(c) + df.format(abs(c)).toString() + "\n"
+        } else if (a < 0.0 && abs(b) == 1.0){
+            "-" + df.format(abs(a)).toString() + "x²" + getSign(b) + "x" + getSign(c) + df.format(abs(c)).toString() + "\n"
+        }else if(a > 0.0 && abs(b) == 1.0){
+            df.format(abs(a)).toString() + "x²" + getSign(b) + "x" + getSign(c) + df.format(abs(c)).toString() + "\n"
+        }else if(a > 0.0 && abs(b) != 1.0){
+            df.format(abs(a)).toString() + "x²" + getSign(b) + df.format(abs(b)).toString() + "x" + getSign(c) + df.format(abs(c)).toString() + "\n"
+        }else{
+            "Algo de errado não está certo!"
+        }
 
         val line2:String = "S = {" + df.format(x1).toString() + " ; " + df.format(x2).toString() + "} \n"
         val line3:String = "\u0394 = -" + "" +" \n" // >> \u0394 represents delta in the UTF-8 encoding
