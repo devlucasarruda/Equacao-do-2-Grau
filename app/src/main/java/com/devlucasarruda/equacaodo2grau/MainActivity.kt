@@ -75,26 +75,42 @@ class MainActivity : AppCompatActivity() {
         val df = DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH))
         df.maximumFractionDigits = 340 //340 = DecimalFormat.DOUBLE_FRACTION_DIGITS
 
-        val line1:String = if(a<0.0 && abs(b) != 1.0){
+        val line1:String = if(a<0.0 && abs(b) != 1.0){ //TODO ax² == 1
             "-" + df.format(abs(a)).toString() + "x²" + getSign(b) + df.format(abs(b)).toString() + "x" + getSign(c) + df.format(abs(c)).toString() + "\n"
-        } else if (a < 0.0 && abs(b) == 1.0){
+        } else if(a < 0.0 && abs(b) == 1.0){
             "-" + df.format(abs(a)).toString() + "x²" + getSign(b) + "x" + getSign(c) + df.format(abs(c)).toString() + "\n"
-        }else if(a > 0.0 && abs(b) == 1.0){
+        } else if(a > 0.0 && abs(b) == 1.0){
             df.format(abs(a)).toString() + "x²" + getSign(b) + "x" + getSign(c) + df.format(abs(c)).toString() + "\n"
-        }else if(a > 0.0 && abs(b) != 1.0){
+        } else{ //(a > 0.0 && abs(b) != 1.0)
             df.format(abs(a)).toString() + "x²" + getSign(b) + df.format(abs(b)).toString() + "x" + getSign(c) + df.format(abs(c)).toString() + "\n"
-        }else{
-            "Algo de errado não está certo!"
         }
 
-        val line2:String = "S = {" + df.format(x1).toString() + " ; " + df.format(x2).toString() + "} \n"
-        val line3:String = "\u0394 = -" + "" +" \n" // >> \u0394 represents delta in the UTF-8 encoding
-        val line4:String = " \n"
+        val line2:String = "\n  S = {" + df.format(x1).toString() + " ; " + df.format(x2).toString() + "} \n\n"
+
+        val line3:String = "\u0394 = b² - 4 . a . c \n" // >> \u0394 represents delta in the UTF-8 encoding
+        val line4:String = "Δ = (" + df.format(b).toString() + ")² - 4 . (" + df.format(a).toString() + ") . (" + df.format(c).toString() + ") \n"
+        val line5:String = when{
+            a * c < 0.0 -> "Δ = " + df.format(b.pow(2)).toString() + " + " + df.format(abs(4*a*c)).toString() + " \n"
+            else -> "Δ = " + df.format(b.pow(2)).toString() + " - " + df.format(abs(4*a*c)).toString() + " \n"
+        }
+        val line6:String = "Δ = " + df.format(d) + " \n\n"
+
+        val line7:String = " x\u2081 = (-b + \u221aΔ) / (2 . a) \n"
+        //val line8:String = " x\u2081 = (" + df.format(-b).toString() + " + " + df.format(sqrt(d)) + ") / (2 . (" + df.format(a).toString() + ")) \n"
+        val line8:String = if(a < 0.0) {
+            " x\u2081 = (" + df.format(-b).toString() + " + " + df.format(sqrt(d)) + ") / (2 . (" + df.format(a).toString() + ")) \n"
+        }else {
+            " x\u2081 = (" + df.format(-b).toString() + " + " + df.format(sqrt(d)) + ") / (2 . " + df.format(a).toString() + ") \n"
+        }
 
 
-        var solution:String = line1 + line2 + line3 + line4
+
+
+        val lineXX:String = " x\u2082 = (-b + \u221aΔ) / (2 . a) \n"
+
+
+        var solution:String = line1 + line2 + line3 + line4 + line5 + line6 + line7 + line8
         textView.text = solution
-
     }
 
     fun clearFields(){
