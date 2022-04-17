@@ -20,27 +20,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="@string/ax2"
             android:ems="10"
-            android:inputType="numberSigned|numberDecimal" />
+            android:hint="@string/ax2"
+            android:inputType="numberSigned|numberDecimal"
+            android:textAlignment="center" />
 
         <EditText
             android:id="@+id/edtB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="@string/bx"
             android:ems="10"
-            android:inputType="numberSigned|numberDecimal" />
+            android:hint="@string/bx"
+            android:inputType="numberSigned|numberDecimal"
+            android:textAlignment="center" />
 
         <EditText
             android:id="@+id/edtC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="@string/c"
             android:ems="10"
-            android:inputType="numberSigned|numberDecimal" />
+            android:hint="@string/c"
+            android:inputType="numberSigned|numberDecimal"
+            android:textAlignment="center" />
     </LinearLayout>
 
     <LinearLayout

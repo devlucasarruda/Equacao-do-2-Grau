@@ -1,8 +1,13 @@
 package com.devlucasarruda.equacaodo2grau
 
+import android.content.Context
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.bold
+import androidx.core.text.italic
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.*
@@ -12,12 +17,12 @@ import kotlin.math.sqrt
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var edtA: EditText
-    lateinit var edtB: EditText
-    lateinit var edtC: EditText
-    lateinit var btnCalculate: Button
-    lateinit var bntClear: ImageButton
-    lateinit var textView: TextView
+    private lateinit var edtA: EditText
+    private lateinit var edtB: EditText
+    private lateinit var edtC: EditText
+    private lateinit var btnCalculate: Button
+    private lateinit var bntClear: ImageButton
+    private lateinit var textView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,11 +44,13 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun calculateEquation(){
-        println("Começou a calcular...")
+    private fun calculateEquation(){
+        //println("Started to calculate...")
+
+        hideKeyboard()
 
         if(edtA.text.isEmpty() || edtB.text.isEmpty() || edtC.text.isEmpty()){
-            Toast.makeText(this, "Por favor preencha todos os campos!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.PleaseFillAllFields), Toast.LENGTH_SHORT).show()
             clearSolution()
             return
         }
@@ -53,41 +60,60 @@ class MainActivity : AppCompatActivity() {
         val c: Double = edtC.text.toString().toDouble()
 
         if(a == 0.0){
-            Toast.makeText(this, "O valor de ax² não pode ser igual a zero!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.ax2CantBeZero), Toast.LENGTH_SHORT).show()
             clearSolution()
             return
         }
 
-        val x1: Double
-        val x2: Double
+        var x1: Double
+        var x2: Double
 
         val d: Double = (b.pow(2) ) - 4*a*c //delta
         if(d < 0){
-            textView.text = "Sem solução no conjunto dos números reais"
+            textView.text = getString(R.string.NoRealSolution)
             return
         } else{
             x1 = (-b + sqrt(d)) / (2*a)
             x2 = (-b - sqrt(d)) / (2*a)
-            println(x1.toString())
-            println(x2.toString())
+            //println(x1.toString())
+            //println(x2.toString())
+        }
+
+        //correctNegativeZero
+        if(abs(x1) == 0.0){
+            x1 = 0.0
+        }
+        if(abs(x2) == 0.0){
+            x2 = 0.0
         }
 
         val df = DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH))
         df.maximumFractionDigits = 340 //340 = DecimalFormat.DOUBLE_FRACTION_DIGITS
 
-        val line1:String = if(a<0.0 && abs(b) != 1.0){ //TODO ax² == 1
-            "-" + df.format(abs(a)).toString() + "x²" + getSign(b) + df.format(abs(b)).toString() + "x" + getSign(c) + df.format(abs(c)).toString() + "\n"
-        } else if(a < 0.0 && abs(b) == 1.0){
-            "-" + df.format(abs(a)).toString() + "x²" + getSign(b) + "x" + getSign(c) + df.format(abs(c)).toString() + "\n"
-        } else if(a > 0.0 && abs(b) == 1.0){
-            df.format(abs(a)).toString() + "x²" + getSign(b) + "x" + getSign(c) + df.format(abs(c)).toString() + "\n"
-        } else{ //(a > 0.0 && abs(b) != 1.0)
-            df.format(abs(a)).toString() + "x²" + getSign(b) + df.format(abs(b)).toString() + "x" + getSign(c) + df.format(abs(c)).toString() + "\n"
-        }
+        val line1:String =
+            if(abs(a) == 1.0){
+                if(abs(b) == 1.0){
+                    getNullSign(a) + "x²" + getSign(b) + "x" + getSign(c) + df.format(abs(c)).toString() + "\n"
+                }else{ //abs(b) != 1.0
+                    getNullSign(a) + "x²" + getSign(b) + df.format(abs(b)).toString() + "x" + getSign(c) + df.format(abs(c)).toString() + "\n"
+                }
+            }else if (a < 0.0){
+                if(abs(b) == 1.0){
+                    "-" + df.format(abs(a)).toString() + "x²" + getSign(b) + "x" + getSign(c) + df.format(abs(c)).toString() + "\n"
+                }else{ //abs(b) != 1.0
+                    "-" + df.format(abs(a)).toString() + "x²" + getSign(b) + df.format(abs(b)).toString() + "x" + getSign(c) + df.format(abs(c)).toString() + "\n"
+                }
+            }else{ // a > 0.0
+                if(abs(b) == 1.0){
+                    df.format(abs(a)).toString() + "x²" + getSign(b) + "x" + getSign(c) + df.format(abs(c)).toString() + "\n"
+                }else{ //abs(b) != 1.0
+                    df.format(abs(a)).toString() + "x²" + getSign(b) + df.format(abs(b)).toString() + "x" + getSign(c) + df.format(abs(c)).toString() + "\n"
+                }
+            }
 
         val line2:String = "\n  S = {" + df.format(x1).toString() + " ; " + df.format(x2).toString() + "} \n\n"
 
-        val line3:String = "\u0394 = b² - 4 . a . c \n" // >> \u0394 represents delta in the UTF-8 encoding
+        val line3 = "\u0394 = b² - 4 . a . c \n" // >> \u0394 represents delta in the UTF-8 encoding
         val line4:String = "Δ = (" + df.format(b).toString() + ")² - 4 . (" + df.format(a).toString() + ") . (" + df.format(c).toString() + ") \n"
         val line5:String = when{
             a * c < 0.0 -> "Δ = " + df.format(b.pow(2)).toString() + " + " + df.format(abs(4*a*c)).toString() + " \n"
@@ -95,40 +121,83 @@ class MainActivity : AppCompatActivity() {
         }
         val line6:String = "Δ = " + df.format(d) + " \n\n"
 
-        val line7:String = " x\u2081 = (-b + \u221aΔ) / (2 . a) \n"
-        //val line8:String = " x\u2081 = (" + df.format(-b).toString() + " + " + df.format(sqrt(d)) + ") / (2 . (" + df.format(a).toString() + ")) \n"
+        val line7 = " x\u2081 = (-b + \u221aΔ) / (2 . a) \n"
         val line8:String = if(a < 0.0) {
             " x\u2081 = (" + df.format(-b).toString() + " + " + df.format(sqrt(d)) + ") / (2 . (" + df.format(a).toString() + ")) \n"
         }else {
             " x\u2081 = (" + df.format(-b).toString() + " + " + df.format(sqrt(d)) + ") / (2 . " + df.format(a).toString() + ") \n"
         }
+        val line9:String = if(a < 0.0) {
+            " x\u2081 = " + df.format(-b + sqrt(d)).toString() + " / (" + df.format(2 * a).toString() + ") \n"
+        }else {
+            " x\u2081 = " + df.format(-b + sqrt(d)).toString() + " / " + df.format(2 * a).toString() + " \n"
+        }
+        val line10:String = " x\u2081 = " + df.format(x1).toString() + " \n\n"
+
+        val line11 = " x\u2082 = (-b - \u221aΔ) / (2 . a) \n"
+        val line12:String = if(a < 0.0) {
+            " x\u2082 = (" + df.format(-b).toString() + " - " + df.format(sqrt(d)) + ") / (2 . (" + df.format(a).toString() + ")) \n"
+        }else {
+            " x\u2082 = (" + df.format(-b).toString() + " - " + df.format(sqrt(d)) + ") / (2 . " + df.format(a).toString() + ") \n"
+        }
+        val line13:String = if(a < 0.0) {
+            " x\u2082 = " + df.format(-b - sqrt(d)).toString() + " / (" + df.format(2 * a).toString() + ") \n"
+        }else {
+            " x\u2082 = " + df.format(-b - sqrt(d)).toString() + " / " + df.format(2 * a).toString() + " \n"
+        }
+        val line14:String = " x\u2082 = " + df.format(x2).toString() + " \n\n"
 
 
-
-
-        val lineXX:String = " x\u2082 = (-b + \u221aΔ) / (2 . a) \n"
-
-
-        var solution:String = line1 + line2 + line3 + line4 + line5 + line6 + line7 + line8
+        val solution:SpannableStringBuilder = SpannableStringBuilder()
+            .bold { append(line1) }
+            .bold { italic { append(line2) } }
+            .append(line3)
+            .append(line4)
+            .append(line5)
+            .bold { append(line6) }
+            .append(line7)
+            .append(line8)
+            .append(line9)
+            .bold { append(line10) }
+            .append(line11)
+            .append(line12)
+            .append(line13)
+            .bold { append(line14) }
         textView.text = solution
     }
 
-    fun clearFields(){
+    private fun clearFields(){
+        hideKeyboard()
+
         edtA.text = null
         edtB.text = null
         edtC.text = null
     }
 
-    fun clearSolution(){
-        textView.text = "ax² + bx + c = 0"
+    private fun clearSolution(){
+        textView.text = getString(R.string.SecondDegreeEquation)
     }
 
-    fun getSign(value:Double):String{
-        if(value < 0.0){
-            return " - "
+    private fun getSign(value:Double):String{
+        return if(value < 0.0){
+            " - "
         }else{
-            return " + "
+            " + "
         }
+    }
+
+    private fun getNullSign(value:Double):String{
+        return if(value < 0.0){
+            " - "
+        }else{
+            ""
+        }
+    }
+
+    private fun hideKeyboard(){
+        val view = this.currentFocus
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 
 }
