@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="409dp"
-        android:layout_height="90dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="1dp">
@@ -23,7 +23,9 @@
             android:ems="10"
             android:hint="@string/ax2"
             android:inputType="numberSigned|numberDecimal"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textColorHint="#757575"
+            android:importantForAutofill="no" />
 
         <EditText
             android:id="@+id/edtB"
@@ -32,8 +34,10 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/bx"
+            android:importantForAutofill="no"
             android:inputType="numberSigned|numberDecimal"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textColorHint="#757575" />
 
         <EditText
             android:id="@+id/edtC"
@@ -43,7 +47,9 @@
             android:ems="10"
             android:hint="@string/c"
             android:inputType="numberSigned|numberDecimal"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:importantForAutofill="no"
+            android:textColorHint="#757575"/>
     </LinearLayout>
 
     <LinearLayout
@@ -53,9 +59,14 @@
 
         <ImageButton
             android:id="@+id/bntClear"
+            style="@style/TextAppearance.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:adjustViewBounds="false"
+            android:contentDescription="@string/clear"
+            android:cropToPadding="false"
+            android:paddingTop="6dp"
             app:srcCompat="@android:drawable/ic_menu_delete" />
 
         <Button
@@ -75,7 +86,7 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ax² + bx + c = 0"
+            android:text="@string/SecondDegreeEquation"
             android:textAlignment="center"
             android:textSize="20sp" />
     </LinearLayout>

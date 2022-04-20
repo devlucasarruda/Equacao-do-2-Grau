@@ -8,4 +8,5 @@
     <string name="NoRealSolution">Sem solução no conjunto dos números reais</string>
     <string name="ax2CantBeZero">O valor de ax² não pode ser igual a zero!</string>
     <string name="PleaseFillAllFields">Por favor preencha todos os campos!</string>
+    <string name="clear">Limpar dados</string>
 </resources>

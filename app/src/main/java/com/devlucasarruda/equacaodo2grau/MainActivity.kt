@@ -172,6 +172,7 @@ class MainActivity : AppCompatActivity() {
         edtA.text = null
         edtB.text = null
         edtC.text = null
+        textView.text = getString(R.string.SecondDegreeEquation)
     }
 
     private fun clearSolution(){
