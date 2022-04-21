@@ -9,7 +9,7 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         tools:layout_editor_absoluteX="1dp"
@@ -22,10 +22,10 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/ax2"
+            android:importantForAutofill="no"
             android:inputType="numberSigned|numberDecimal"
             android:textAlignment="center"
-            android:textColorHint="#757575"
-            android:importantForAutofill="no" />
+            android:textColorHint="#757575" />
 
         <EditText
             android:id="@+id/edtB"
@@ -46,10 +46,10 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/c"
+            android:importantForAutofill="no"
             android:inputType="numberSigned|numberDecimal"
             android:textAlignment="center"
-            android:importantForAutofill="no"
-            android:textColorHint="#757575"/>
+            android:textColorHint="#757575" />
     </LinearLayout>
 
     <LinearLayout
@@ -77,18 +77,23 @@
             android:text="@string/Calcular" />
     </LinearLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/SecondDegreeEquation"
-            android:textAlignment="center"
-            android:textSize="20sp" />
-    </LinearLayout>
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/SecondDegreeEquation"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
